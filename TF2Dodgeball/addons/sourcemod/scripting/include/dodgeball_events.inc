@@ -200,11 +200,11 @@ public Action OnBroadcastAudio(Event hEvent, char[] strEventName, bool bDontBroa
 }
 
 /** Called when a projectile is deflected. Updates deflection count and drag state. */
-public void OnObjectDeflected(Event hEvent, char[] strEventName, bool bDontBroadcast)
+public Action OnObjectDeflected(Event hEvent, const char[] strEventName, bool bDontBroadcast)
 {
 	int iEntity = hEvent.GetInt("object_entindex");
 	int iIndex  = FindRocketByEntity(iEntity);
-	if (iIndex == -1) return;
+	if (iIndex == -1) return Plugin_Continue;
 
 	RocketEventDeflections[iIndex]++;
 
@@ -229,6 +229,8 @@ public void OnObjectDeflected(Event hEvent, char[] strEventName, bool bDontBroad
 	{
 		SetEntProp(iEntity, Prop_Send, "m_iTeamNum", 1, 1);
 	}
+
+	return Plugin_Continue;
 }
 
 /**

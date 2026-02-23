@@ -9,6 +9,8 @@
 
 // Tracks whether game events have been hooked (to prevent double-unhook errors)
 static bool EventsHooked = false;
+// Tracks whether object_deflected was successfully hooked.
+static bool ObjectDeflectedHooked = false;
 
 /** Checks if the current map is a dodgeball map (starts with "tfdb_", "db_", or "dbs_"). */
 bool IsDodgeBallMap()
@@ -51,7 +53,11 @@ void EnableDodgeBall()
 		HookEventEx("player_death", OnPlayerDeath, EventHookMode_Pre);
 		HookEventEx("post_inventory_application", OnPlayerInventory, EventHookMode_Post);
 		HookEventEx("teamplay_broadcast_audio", OnBroadcastAudio, EventHookMode_Pre);
-		HookEventEx("object_deflected", OnObjectDeflected);
+		ObjectDeflectedHooked = HookEventEx("object_deflected", OnObjectDeflected);
+		if (!ObjectDeflectedHooked)
+		{
+			LogError("Failed to hook game event \"object_deflected\". Deflect-specific rocket updates will be disabled.");
+		}
 		EventsHooked = true;
 	}
 
@@ -127,7 +133,11 @@ void DisableDodgeBall()
 		UnhookEvent("player_death", OnPlayerDeath, EventHookMode_Pre);
 		UnhookEvent("post_inventory_application", OnPlayerInventory, EventHookMode_Post);
 		UnhookEvent("teamplay_broadcast_audio", OnBroadcastAudio, EventHookMode_Pre);
-		UnhookEvent("object_deflected", OnObjectDeflected);
+		if (ObjectDeflectedHooked)
+		{
+			UnhookEvent("object_deflected", OnObjectDeflected);
+			ObjectDeflectedHooked = false;
+		}
 		EventsHooked = false;
 	}
 
