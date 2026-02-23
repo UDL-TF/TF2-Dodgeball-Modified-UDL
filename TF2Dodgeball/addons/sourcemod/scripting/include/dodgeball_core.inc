@@ -53,10 +53,15 @@ void EnableDodgeBall()
 		HookEventEx("player_death", OnPlayerDeath, EventHookMode_Pre);
 		HookEventEx("post_inventory_application", OnPlayerInventory, EventHookMode_Post);
 		HookEventEx("teamplay_broadcast_audio", OnBroadcastAudio, EventHookMode_Pre);
-		ObjectDeflectedHooked = HookEventEx("object_deflected", OnObjectDeflected);
+		// Keep this hook global (not tied to enable/disable) to avoid
+		// map-end unhook exceptions observed on some installs.
 		if (!ObjectDeflectedHooked)
 		{
-			LogError("Failed to hook game event \"object_deflected\". Deflect-specific rocket updates will be disabled.");
+			ObjectDeflectedHooked = HookEventEx("object_deflected", OnObjectDeflected);
+			if (!ObjectDeflectedHooked)
+			{
+				LogError("Failed to hook game event \"object_deflected\". Deflect-specific rocket updates will be disabled.");
+			}
 		}
 		EventsHooked = true;
 	}
@@ -133,11 +138,6 @@ void DisableDodgeBall()
 		UnhookEvent("player_death", OnPlayerDeath, EventHookMode_Pre);
 		UnhookEvent("post_inventory_application", OnPlayerInventory, EventHookMode_Post);
 		UnhookEvent("teamplay_broadcast_audio", OnBroadcastAudio, EventHookMode_Pre);
-		if (ObjectDeflectedHooked)
-		{
-			UnhookEvent("object_deflected", OnObjectDeflected);
-			ObjectDeflectedHooked = false;
-		}
 		EventsHooked = false;
 	}
 
