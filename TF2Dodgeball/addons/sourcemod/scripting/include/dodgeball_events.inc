@@ -350,32 +350,44 @@ public Action OnTouch(int iEntity, int iOther)
 
 	float vBounceVec[3];
 	SubtractVectors(vVelocity, vNormal, vBounceVec);
-	// --- New Bounce Mechanic ---
-	// Check if the owner is looking down to apply extra bounce force.
 	int iOwner = GetEntPropEnt(iEntity, Prop_Send, "m_hOwnerEntity");
-	if (IsValidClient(iOwner, true))
+	if (!(RocketInstanceFlags[iIndex] & RocketFlag_CrawlBounce))
 	{
-		float fOwnerAngles[3];
-		GetClientEyeAngles(iOwner, fOwnerAngles);
-
-		// Check if player's pitch is looking down enough
-		if (fOwnerAngles[0] >= CvarBounceForceAngle.FloatValue)
+		if (IsValidClient(iOwner, true))
 		{
-			// Apply the base bounce scale and the extra force multiplier
-			ScaleVector(vBounceVec, RocketClassBounceScale[iClass] * CvarBounceForceScale.FloatValue);
+			float fOwnerAngles[3];
+			GetClientEyeAngles(iOwner, fOwnerAngles);
+	
+			if (fOwnerAngles[0] >= RocketClassBounceForceAngle[iClass])
+				ScaleVector(vBounceVec, RocketClassBounceScale[iClass] * RocketClassBounceForceScale[iClass]);
+			else
+				ScaleVector(vBounceVec, RocketClassBounceScale[iClass]);
 		}
 		else
 		{
-			// Apply only the base bounce scale
 			ScaleVector(vBounceVec, RocketClassBounceScale[iClass]);
 		}
 	}
 	else
 	{
-		// Apply only the base bounce scale if there's no valid owner
-		ScaleVector(vBounceVec, RocketClassBounceScale[iClass]);
+		float fBounceScale = RocketClassBounceScale[iClass];
+
+		if (IsValidClient(iOwner, true))
+		{
+			float fOwnerAngles[3];
+			GetClientEyeAngles(iOwner, fOwnerAngles);
+			if (fOwnerAngles[0] >= RocketClassBounceForceAngle[iClass])
+				fBounceScale *= RocketClassBounceForceScale[iClass];
+		}
+
+		// Crawl mode: preserve horizontal carry, suppress/clamp upward pop.
+		vBounceVec[0] *= fBounceScale;
+		vBounceVec[1] *= fBounceScale;
+		vBounceVec[2] *= fBounceScale * RocketClassCrawlBounceScale[iClass];
+
+		if (RocketClassCrawlBounceMaxUp[iClass] > 0.0 && vBounceVec[2] > RocketClassCrawlBounceMaxUp[iClass])
+			vBounceVec[2] = RocketClassCrawlBounceMaxUp[iClass];
 	}
-	// --- End New Bounce Mechanic ---
 
 
 	float vNewAngles[3];

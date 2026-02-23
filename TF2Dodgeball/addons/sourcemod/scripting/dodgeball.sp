@@ -128,6 +128,10 @@ DataPack       RocketClassCmdsOnExplode[MAX_ROCKET_CLASSES];
 DataPack       RocketClassCmdsOnNoTarget[MAX_ROCKET_CLASSES];
 int            RocketClassMaxBounces[MAX_ROCKET_CLASSES];
 float          RocketClassBounceScale[MAX_ROCKET_CLASSES];
+float          RocketClassCrawlBounceScale[MAX_ROCKET_CLASSES];
+float          RocketClassCrawlBounceMaxUp[MAX_ROCKET_CLASSES];
+float          RocketClassBounceForceAngle[MAX_ROCKET_CLASSES];
+float          RocketClassBounceForceScale[MAX_ROCKET_CLASSES];
 int            RocketClassCount;
 
 // Spawner classes
@@ -167,12 +171,12 @@ Handle ForwardOnRocketStateChanged;
 // *********************************************************************************
 // PLUGIN LOGIC (INCLUDES)
 // *********************************************************************************
-#include "dodgeball_utilities.inc"
-#include "dodgeball_config.inc"
-#include "dodgeball_rockets.inc"
-#include "dodgeball_events.inc"
-#include "dodgeball_core.inc"
-#include "dodgeball_natives.inc"
+#include <dodgeball_utilities>
+#include <dodgeball_config.inc>
+#include <dodgeball_rockets.inc>
+#include <dodgeball_events.inc>
+#include <dodgeball_core.inc>
+#include <dodgeball_natives.inc>
 
 // *********************************************************************************
 // PLUGIN INFO & LIFECYCLE

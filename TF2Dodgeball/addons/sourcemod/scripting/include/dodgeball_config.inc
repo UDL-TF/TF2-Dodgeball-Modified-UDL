@@ -393,14 +393,15 @@ void ParseClasses(KeyValues kvConfig)
 			}
 		}
 
-		if (kvConfig.GetNum("elevate on deflect", 1) == 1) iFlags |= RocketFlag_ElevateOnDeflect;
-		if (kvConfig.GetNum("neutral rocket", 0) == 1)     iFlags |= RocketFlag_IsNeutral;
-		if (kvConfig.GetNum("keep direction", 0) == 1)     iFlags |= RocketFlag_KeepDirection;
-		if (kvConfig.GetNum("teamless deflects", 0) == 1)  iFlags |= RocketFlag_TeamlessHits;
-		if (kvConfig.GetNum("reset bounces", 0) == 1)      iFlags |= RocketFlag_ResetBounces;
-		if (kvConfig.GetNum("no bounce drags", 0) == 1)    iFlags |= RocketFlag_NoBounceDrags;
-		if (kvConfig.GetNum("can be stolen", 0) == 1)      iFlags |= RocketFlag_CanBeStolen;
-		if (kvConfig.GetNum("steal team check", 0) == 1)   iFlags |= RocketFlag_StealTeamCheck;
+			if (kvConfig.GetNum("elevate on deflect", 1) == 1) iFlags |= RocketFlag_ElevateOnDeflect;
+			if (kvConfig.GetNum("neutral rocket", 0) == 1)     iFlags |= RocketFlag_IsNeutral;
+			if (kvConfig.GetNum("keep direction", 0) == 1)     iFlags |= RocketFlag_KeepDirection;
+			if (kvConfig.GetNum("teamless deflects", 0) == 1)  iFlags |= RocketFlag_TeamlessHits;
+			if (kvConfig.GetNum("reset bounces", 0) == 1)      iFlags |= RocketFlag_ResetBounces;
+			if (kvConfig.GetNum("no bounce drags", 0) == 1)    iFlags |= RocketFlag_NoBounceDrags;
+			if (kvConfig.GetNum("can be stolen", 0) == 1)      iFlags |= RocketFlag_CanBeStolen;
+			if (kvConfig.GetNum("steal team check", 0) == 1)   iFlags |= RocketFlag_StealTeamCheck;
+			if (kvConfig.GetNum("crawl bounce", 0) == 1)       iFlags |= RocketFlag_CrawlBounce;
 
 		RocketClassDamage[iIndex]            = kvConfig.GetFloat("damage");
 		RocketClassDamageIncrement[iIndex]   = kvConfig.GetFloat("damage increment");
@@ -419,16 +420,20 @@ void ParseClasses(KeyValues kvConfig)
 			iFlags |= RocketFlag_IsTRLimited;
 		}
 
-		RocketClassElevationRate[iIndex]     = kvConfig.GetFloat("elevation rate");
-		RocketClassElevationLimit[iIndex]    = kvConfig.GetFloat("elevation limit");
-		RocketClassControlDelay[iIndex]      = kvConfig.GetFloat("control delay");
-		RocketClassDragTimeMin[iIndex]       = kvConfig.GetFloat("drag time min");
-		RocketClassDragTimeMax[iIndex]       = kvConfig.GetFloat("drag time max");
-		RocketClassMaxBounces[iIndex]        = kvConfig.GetNum("max bounces");
-		RocketClassBounceScale[iIndex]       = kvConfig.GetFloat("bounce scale", 1.0);
-		RocketClassPlayerModifier[iIndex]    = kvConfig.GetFloat("no. players modifier");
-		RocketClassRocketsModifier[iIndex]   = kvConfig.GetFloat("no. rockets modifier");
-		RocketClassTargetWeight[iIndex]      = kvConfig.GetFloat("direction to target weight");
+			RocketClassElevationRate[iIndex]     = kvConfig.GetFloat("elevation rate");
+			RocketClassElevationLimit[iIndex]    = kvConfig.GetFloat("elevation limit");
+			RocketClassControlDelay[iIndex]      = kvConfig.GetFloat("control delay");
+			RocketClassDragTimeMin[iIndex]       = kvConfig.GetFloat("drag time min");
+			RocketClassDragTimeMax[iIndex]       = kvConfig.GetFloat("drag time max");
+			RocketClassMaxBounces[iIndex]        = kvConfig.GetNum("max bounces");
+			RocketClassBounceScale[iIndex]       = kvConfig.GetFloat("bounce scale", 1.0);
+			RocketClassBounceForceScale[iIndex]  = kvConfig.GetFloat("bounce force scale", CvarBounceForceScale.FloatValue);
+			RocketClassBounceForceAngle[iIndex]  = kvConfig.GetFloat("bounce force angle", CvarBounceForceAngle.FloatValue);
+			RocketClassCrawlBounceScale[iIndex]  = kvConfig.GetFloat("crawl bounce scale", 0.4);
+			RocketClassCrawlBounceMaxUp[iIndex]  = kvConfig.GetFloat("crawl bounce max up", 250.0);
+			RocketClassPlayerModifier[iIndex]    = kvConfig.GetFloat("no. players modifier");
+			RocketClassRocketsModifier[iIndex]   = kvConfig.GetFloat("no. rockets modifier");
+			RocketClassTargetWeight[iIndex]      = kvConfig.GetFloat("direction to target weight");
 		
 		DataPack hCmds = null;
 		kvConfig.GetString("on spawn", strBuffer, sizeof(strBuffer));
